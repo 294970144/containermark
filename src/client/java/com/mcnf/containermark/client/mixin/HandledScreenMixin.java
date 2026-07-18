@@ -22,8 +22,8 @@ public abstract class HandledScreenMixin {
     protected Slot focusedSlot;
 
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
-    private void containermark$keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
-        if (KeyBindings.markKey != null && KeyBindings.markKey.matchesKey(new KeyInput(keyCode, scanCode, modifiers))) {
+    private void containermark$keyPressed(KeyInput keyInput, CallbackInfoReturnable<Boolean> cir) {
+        if (KeyBindings.markKey != null && KeyBindings.markKey.matchesKey(keyInput)) {
             if (focusedSlot != null && focusedSlot.hasStack() && !focusedSlot.getStack().isEmpty()) {
                 int slotIndex = focusedSlot.id;
                 if (ClientModState.isServerInstalled()) {
