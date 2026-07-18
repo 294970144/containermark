@@ -42,6 +42,8 @@ public class MarkHandler {
             return;
         }
 
+        ServerWorld world = player.getEntityWorld();
+
         // Get items and target display name
         List<ItemStack> items;
         String targetName;
@@ -65,12 +67,11 @@ public class MarkHandler {
             target.pos(),
             player.getName().getString(),
             items,
-            player.getEntityWorld().getRegistryKey().getValue().toString(),
+            world.getRegistryKey().getValue().toString(),
             currentTick
         );
 
         // Execute three notifications
-        ServerWorld world = player.getEntityWorld();
 
         // 1. Floating text display
         DisplayManager.spawnDisplay(world, target.pos(), items, player.getUuid(), currentTick);
