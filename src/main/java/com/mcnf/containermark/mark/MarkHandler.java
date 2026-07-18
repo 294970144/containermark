@@ -42,20 +42,21 @@ public class MarkHandler {
             return;
         }
 
-        // Get items
+        // Get items and target display name
         List<ItemStack> items;
-        String containerName;
+        String targetName;
 
         if (target.isContainer()) {
             items = ContainerInspector.inspectInventory(target.inventory());
-            containerName = ContainerInspector.getContainerName(target.inventory());
             if (items.isEmpty()) {
                 player.sendMessage(Text.translatable("message.containermark.empty").formatted(Formatting.RED), false);
                 return;
             }
+            // Use block name (chest, furnace, etc.) as the target name
+            targetName = world.getBlockState(target.pos()).getBlock().getName().getString();
         } else {
             items = ContainerInspector.singleItem(target.singleItem());
-            containerName = target.singleItem().getName().getString();
+            targetName = target.singleItem().getName().getString();
         }
 
         // Create mark entry
@@ -81,7 +82,7 @@ public class MarkHandler {
 
         // 3. Chat message to teammates
         List<ServerPlayerEntity> targets = PlayerSelector.selectPlayers(server, player, target.pos());
-        Text message = MessageBuilder.buildMessage(entry, containerName);
+        Text message = MessageBuilder.buildMessage(entry, targetName);
         for (ServerPlayerEntity p : targets) {
             p.sendMessage(message, false);
         }

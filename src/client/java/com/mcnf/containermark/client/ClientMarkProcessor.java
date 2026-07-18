@@ -53,7 +53,9 @@ public class ClientMarkProcessor {
             BlockEntity be = client.world.getBlockEntity(pos);
             if (be instanceof Inventory inventory) {
                 List<ItemStack> items = inspectInventory(inventory);
-                executeMark(client, pos, items, getContainerName(be));
+                // Use block name (chest, furnace, etc.) as the target name
+                String targetName = client.world.getBlockState(pos).getBlock().getName().getString();
+                executeMark(client, pos, items, targetName);
                 lastMarkTick = currentTick;
             }
         } else if (hit.getType() == HitResult.Type.ENTITY) {
