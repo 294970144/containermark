@@ -113,6 +113,18 @@ public class DisplayManager {
         }
     }
 
+    /**
+     * Clean up all active displays for a player on disconnect.
+     */
+    public static void cleanupPlayer(UUID playerUuid) {
+        List<UUID> playerList = playerDisplays.remove(playerUuid);
+        if (playerList != null) {
+            for (UUID entityUuid : playerList) {
+                activeDisplays.remove(entityUuid);
+            }
+        }
+    }
+
     private static void removeEntityFromWorld(MinecraftServer server, ActiveDisplay display) {
         ServerWorld world = server.getWorld(display.worldKey);
         if (world != null) {

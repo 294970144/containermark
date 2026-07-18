@@ -136,6 +136,13 @@ public class MarkHandler {
         lastMarkTick.put(player.getUuid(), currentTick);
     }
 
+    /**
+     * Clean up player data on disconnect to prevent memory leaks.
+     */
+    public static void onPlayerDisconnect(UUID playerUuid) {
+        lastMarkTick.remove(playerUuid);
+    }
+
     private static boolean checkCooldown(ServerPlayerEntity player, long currentTick) {
         Long last = lastMarkTick.get(player.getUuid());
         if (last != null) {

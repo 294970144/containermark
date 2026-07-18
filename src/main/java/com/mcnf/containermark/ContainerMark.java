@@ -4,14 +4,16 @@ import com.mcnf.containermark.config.MarkConfig;
 import com.mcnf.containermark.mark.DisplayManager;
 import com.mcnf.containermark.mark.MarkHandler;
 import com.mcnf.containermark.network.ModNetworking;
-import com.mcnf.containermark.notify.PlayerSelector;
 import com.mcnf.containermark.team.TeamCommand;
 import com.mcnf.containermark.team.TeamManager;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.UUID;
 
 public class ContainerMark implements ModInitializer {
     public static final String MOD_ID = "containermark";
@@ -35,6 +37,14 @@ public class ContainerMark implements ModInitializer {
         // Register server tick for display management
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             DisplayManager.tick(server);
+        });
+
+        // Clean up player data on disconnect to prevent memory leaks
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            UUID uuid = handler.getPlayer().getUuid();
+            MarkHandler.onPlayerDisconnect(uuid);
+            DisplayManager.cleanupPlayer(uuid);
+            TeamManager.cleanupInvites(server, uuid);
         });
 
         LOGGER.info("[ContainerMark] Initialized successfully.");

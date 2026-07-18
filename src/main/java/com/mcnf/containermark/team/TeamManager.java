@@ -148,6 +148,16 @@ public class TeamManager {
         player.sendMessage(Text.translatable("message.containermark.team_list", team.getName(), memberNames.toString()).formatted(Formatting.GREEN), false);
     }
 
+    /**
+     * Clean up pending invites for a player on disconnect.
+     */
+    public static void cleanupInvites(MinecraftServer server, UUID playerUuid) {
+        TeamState state = TeamState.getServerState(server);
+        for (Team team : state.getAllTeams()) {
+            team.getInvites().remove(playerUuid);
+        }
+    }
+
     public static List<ServerPlayerEntity> getTeammates(MinecraftServer server, UUID playerUuid) {
         List<ServerPlayerEntity> result = new ArrayList<>();
         TeamState state = TeamState.getServerState(server);
