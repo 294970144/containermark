@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "containermark",
+  "version": "${version}",
+  "name": "ContainerMark",
+  "description": "标记容器/物品并通知队友。潜行+快捷键标记世界目标，容器UI内快捷键标记物品。",
+  "authors": ["mcnf"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.mcnf.containermark.ContainerMark"],
+    "client": ["com.mcnf.containermark.ContainerMarkClient"]
+  },
+  "mixins": [
+    "containermark.mixins.json",
+    {
+      "config": "containermark.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
